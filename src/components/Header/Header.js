@@ -3,9 +3,13 @@ import './Header.scss';
 import {ReactComponent as Logo} from '../../assets/crown.svg'; 
 import { Link } from 'react-router-dom';
 import { auth } from '../../firebase/firebase.utils';
-import { connect } from 'react-redux';
 import CartIcon from '../CartIcon/CartIcon';
-import CartDropdown from '../CartDropdown/CartDropdown'
+import CartDropdown from '../CartDropdown/CartDropdown';
+
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import {selectCartHidden } from '../../redux/cart/cart-selectors';
+import { selectCurrentUser } from '../../redux/user/user-selectors';
 
 
 const Header = ({ currentUser, hidden }) => {
@@ -33,14 +37,16 @@ const Header = ({ currentUser, hidden }) => {
     )
 }
 
-const mapStateToProps = ({ user: {currentUser}, cart: {hidden} }) => ({
-    currentUser,
-    hidden
-})
+const mapStateToProps = createStructuredSelector({
+    currentUser: selectCurrentUser,
+    hidden: selectCartHidden
+});
 
 export default connect(mapStateToProps)(Header);
 
-/*
-const mapStateToProps = state => ({
-    currentUser: state.user.currentUser
-}) */
+/* Otra manera de ponerlo sin el structured
+const mapStateToProps = (state) => ({
+    currentUser: selectCurrentUser(state),
+    hidden: selectCartHidden(state)
+})
+*/
